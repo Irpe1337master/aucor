@@ -21,7 +21,7 @@ if ( $reviews ) {
 
         $review_score = wp_get_post_terms($review->ID, 'review_score', array( 'fields' => 'names' ));
 
-        if ($review_score) {
+        if ( $display_score && $review_score ) {
           echo '<p><b>Score: ' . esc_html( $review_score[0] ) . '</b></p>';
         }
 

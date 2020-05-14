@@ -17,6 +17,7 @@
     <h1>Manage plugin</h1>
     <form method="post" action="options.php">
     <?php
+    
         // This prints out all hidden setting fields
         settings_fields( 'aucor_reviews_settings' );
         do_settings_sections( 'aucor-reviews-settings' );

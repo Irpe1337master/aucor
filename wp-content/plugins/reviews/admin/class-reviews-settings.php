@@ -1,5 +1,13 @@
 <?php
-
+/**
+ * Settings for admin
+ *
+ * Defines the available settings for plugin
+ *
+ * @package    Reviews
+ * @subpackage Reviews/settings
+ * @author     Iiro Hongisto <iiro.roar@gmail.com>
+ */
 class Settings {
 
 	/**
@@ -19,6 +27,15 @@ class Settings {
 	 * @var      string    $version    The current version of this plugin.
 	 */
 	private $version;
+
+  /**
+	 * The plugin options
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 * @var      string    $options    The options
+	 */
+	private $options;
 
 	/**
 	 * Initialize the class and set its properties.
@@ -74,7 +91,15 @@ class Settings {
      'aucor_reviews_settings_section', // Section belongs to
    );
 
-   register_setting( 'aucor_reviews_settings', 'aucor_display_score', array( $this, 'aucor_sanitize_score' ) );
+   add_settings_field(
+     'aucor_category_filter_field', // Slug for this
+     __( 'Display by category', 'aucor' ),
+     array( $this, 'aucor_display_category_filter_callback' ), // Callback
+     'aucor-reviews-settings', // Settings page
+     'aucor_reviews_settings_section', // Section belongs to
+   );
+
+   register_setting( 'aucor_reviews_settings', 'aucor_reviews_settings', array( $this, 'aucor_sanitize_score' ) );
 
  }
 
@@ -82,28 +107,52 @@ class Settings {
  /**
  * Get the settings option array and print one of its values
  */
-public function aucor_display_score_callback()
-{
-  $options = get_option( 'aucor_display_score' );
+public function aucor_display_score_callback() {
+  $this->options = get_option( 'aucor_reviews_settings' );
 
-//var_dump($options);
-  echo '<input id="aucor-display-score" name="aucor_display_score[aucor_display_score_field]" type="checkbox" value="1"'.
-    ( isset( $options['aucor_display_score_field'] )  ? checked( $options['aucor_display_score_field'], 1, false ) : '' )
+//var_dump($this->options);
+  echo '<input id="aucor-display-score" name="aucor_reviews_settings[aucor_display_score_field]" type="checkbox" value="1"'.
+    ( isset( $this->options['aucor_display_score_field'] )  ? checked( $this->options['aucor_display_score_field'], 1, false ) : '' )
   .' />';
+}
+
+/**
+* Get the settings option array and print one of its values
+*/
+public function aucor_display_category_filter_callback() {
+
+ $this->options = get_option( 'aucor_reviews_settings' );
+ $categories = get_categories();
+
+ echo '<select id="aucor-category-filter-field" name="aucor_reviews_settings[aucor_category_filter_field][]" multiple>';
+
+   foreach ($categories as $category) {
+     if ( in_array( $category->term_id, $this->options['aucor_category_filter_field'] ) ) {
+       echo '<option value="'. $category->term_id .'" selected>'. $category->name .'</option>';
+     } else {
+       echo '<option value="'. $category->term_id .'">'. $category->name .'</option>';
+     }
+   }
+
+ echo '</select>';
+
 }
 
 /**
 * Sanitize
 */
-public function aucor_sanitize_score( $input )
-{
+public function aucor_sanitize_score( $input ) {
   $new_input = array();
 
   if ( isset( $input['aucor_display_score_field'] ) ) {
     $new_input['aucor_display_score_field'] = intval( $input['aucor_display_score_field'] );
   }
 
-  return $input;
+  if ( isset( $input['aucor_category_filter_field'] ) ) {
+    $new_input['aucor_category_filter_field'] = array_map( 'intval', $input['aucor_category_filter_field'] );
+  }
+
+  return $new_input;
 }
 
 

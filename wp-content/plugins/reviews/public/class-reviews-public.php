@@ -119,10 +119,20 @@ class Reviews_Public {
 
 		$save_review = false;
 		$save_review = $this->aucor_validate_form_fields();
+		$review_scores = [];
 
+		$plugin_settings = get_option( 'aucor_reviews_settings' );
+		$display_score = ( isset( $plugin_settings['aucor_display_score_field'] ) && $plugin_settings['aucor_display_score_field'] == 1) ? true : false;
+
+		// Available only on posts
 		if ( is_single() == false ) {
 			$error_message = 'Display review form with a post. :)';
 			include_once 'partials/reviews-shortcode-error.php';
+			return;
+		}
+
+		// Check conditional logic in settings
+		if ( $this->aucor_conditional_logic() == false ) {
 			return;
 		}
 
@@ -138,7 +148,9 @@ class Reviews_Public {
 			}
 
 		} else {
-			$preview_scores = get_terms( array(
+
+			// Load score if allowed in plugin settings
+			$review_scores = get_terms( array(
 			    'taxonomy' => 'review_score',
 			    'hide_empty' => false,
 			) );
@@ -155,12 +167,22 @@ class Reviews_Public {
 	 */
 	public function aucor_display_post_reviews() {
 
+		// Available only on posts
 		if ( is_single() == false ) {
 			$error_message = 'Display reviews with a post. :)';
 			include_once 'partials/reviews-shortcode-error.php';
 			return;
 		}
 
+		// Check conditional logic in settings
+		if ( $this->aucor_conditional_logic() == false ) {
+			return;
+		}
+
+		$plugin_settings = get_option( 'aucor_reviews_settings' );
+		$display_score = ( isset( $plugin_settings['aucor_display_score_field'] ) && $plugin_settings['aucor_display_score_field'] == 1) ? true : false;
+
+		// Fetch posts reviews. The posts ID is saved into CPT reviews metadata
 		$args = array(
 		    'post_type'  => 'reviews',
 		    'meta_query' => array(
@@ -177,6 +199,33 @@ class Reviews_Public {
 		include_once 'partials/reviews-shortcode-display-reviews.php';
 
 		wp_reset_postdata();
+
+	}
+
+	/**
+	 * Conditional logic to display or hide elements
+	 *
+	 * @since    1.0.0
+	 */
+	public function aucor_conditional_logic() {
+
+		$display = true;
+		$post_categories = get_the_category();
+		$plugin_settings = get_option( 'aucor_reviews_settings' );
+
+		// Display elements based on post category. Display logic is defined in plugin settings
+		if ( isset( $plugin_settings['aucor_category_filter_field'] ) ) {
+			foreach ( $post_categories as $post_category ) {
+				if (  in_array( $post_category->term_id, $plugin_settings['aucor_category_filter_field'] )  ) {
+					$display = true;
+					break;
+				} else {
+					$display = false;
+				}
+			}
+		}
+
+		return $display;
 
 	}
 

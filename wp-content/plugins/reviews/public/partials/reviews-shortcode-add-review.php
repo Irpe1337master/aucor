@@ -34,15 +34,17 @@
       rows="5"
       required><?php if ( isset( $_POST['review_content'] ) ) echo esc_html( $_POST['review_content'] ); ?></textarea>
   </div>
-  <div class="form-group">
-    <label for="select-review-score"><?php _e('Score', 'aucor') ?></label>
-    <select class="form-control" name="review_score" id="select-review-score">
-      <?php
-        foreach ( $preview_scores as $preview_score ) {
-          echo '<option value="'. esc_html( $preview_score->term_id ) .'">'. esc_html( $preview_score->name ) .'</option>';
-        }
-      ?>
-    </select>
-  </div>
+  <?php if ( $display_score ): ?>
+    <div class="form-group">
+      <label for="select-review-score"><?php _e('Score', 'aucor') ?></label>
+      <select class="form-control" name="review_score" id="select-review-score">
+        <?php
+          foreach ( $review_scores as $review_score ) {
+            echo '<option value="'. esc_html( $review_score->term_id ) .'">'. esc_html( $review_score->name ) .'</option>';
+          }
+        ?>
+      </select>
+    </div>
+  <?php endif; ?>
   <button type="submit" class="btn btn-primary"><?php _e('Add Review', 'aucor') ?></button>
 </form>
