@@ -111,7 +111,8 @@ class Reviews_Public {
 	}
 
 	/**
-	 * Handle review form actions. Display the form and saves the review
+	 * Handle review form actions. Display the form and saves the review.
+	 * Shortcode
 	 *
 	 * @since    1.0.0
 	 */
@@ -149,7 +150,6 @@ class Reviews_Public {
 
 		} else {
 
-			// Load score if allowed in plugin settings
 			$review_scores = get_terms( array(
 			    'taxonomy' => 'review_score',
 			    'hide_empty' => false,
@@ -161,7 +161,8 @@ class Reviews_Public {
 	}
 
 	/**
-	 * Handle review form actions. Display the form and saves the review
+	 * Display posts reviews.
+	 * Shortcode
 	 *
 	 * @since    1.0.0
 	 */
