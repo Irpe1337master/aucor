@@ -3,6 +3,9 @@
  * included in this file.
  */
  .border-bottom {
-   padding-bottom: 5px;
    border-bottom: 2px solid #ccc;
  }
+
+.form-group {
+  margin: 2rem 0;
+}

@@ -11,7 +11,7 @@
  */
 ?>
 
-<h4><?php _e('Hello friend! Write your review about this subject.', 'aucor') ?></h4>
+<h4><?php _e('Hello friend! Write your review about this review.', 'aucor') ?></h4>
 <!-- This file should primarily consist of HTML with a little bit of PHP. -->
 <form id="form-add-review" method="POST">
   <div class="form-group">

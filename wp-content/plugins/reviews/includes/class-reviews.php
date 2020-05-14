@@ -117,6 +117,11 @@ class Reviews {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-reviews-admin.php';
 
 		/**
+		 * The class responsible for defining all plugin settings.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-reviews-settings.php';
+
+		/**
 		 * The class responsible for defining all actions that occur in the public-facing
 		 * side of the site.
 		 */
@@ -157,12 +162,17 @@ class Reviews {
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 
-		// Options page
-		$this->loader->add_action( 'admin_menu', $plugin_admin, 'aucor_add_options_page' );
-
 		// Review custom post type
 		$this->loader->add_action( 'init', $plugin_admin, 'aucor_reviews_custom_post_type' );
 		$this->loader->add_action( 'init', $plugin_admin, 'aucor_review_taxonomies' );
+
+		// Plugin settings
+		$plugin_settings = new Settings( $this->get_plugin_name(), $this->get_version() );
+
+		$this->loader->add_action( 'admin_menu', $plugin_settings, 'aucor_add_options_page' );
+		$this->loader->add_action( 'admin_init', $plugin_settings, 'aucor_register_settings' );
+
+
 
 	}
 

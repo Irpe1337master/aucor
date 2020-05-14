@@ -1,7 +1,7 @@
 <?php
 
 /**
- * HTML for adding review. Used by shortcode
+ * HTML for displaying reviews
  *
  * @link       iirohongisto.com
  * @since      1.0.0
@@ -10,7 +10,6 @@
  * @subpackage Reviews/public/partials
  */
 
-// The Loop
 ?>
 <h4>Reviews by other people!</h4>
 <?php
@@ -23,7 +22,7 @@ if ( $reviews ) {
         $review_score = wp_get_post_terms($review->ID, 'review_score', array( 'fields' => 'names' ));
 
         if ($review_score) {
-          echo '<strong>Score: ' . esc_html( $review_score[0] ) . '</strong>';
+          echo '<p><b>Score: ' . esc_html( $review_score[0] ) . '</b></p>';
         }
 
       echo '</div>';

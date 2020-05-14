@@ -101,33 +101,6 @@ class Reviews_Admin {
 	}
 
 	/**
-	 * Admin settings page
-	 *
-	 * @since    1.0.0
-	 */
-	 public function aucor_add_options_page() {
-		 add_menu_page( __( 'Aucor form settings' ), __( 'Aucor form settings' ), 'manage_options', 'aucor-form-settings', array( $this, 'aucor_display_options_page' ));
-	 }
-
-	 /**
-	  * Admin settings page HTML
-	  *
-	  * @since    1.0.0
-	  */
-	 public function aucor_display_options_page() {
-		 include_once 'partials/reviews-admin-display.php';
-	 }
-
-	 /**
-	  * Register settings
-	  *
-	  * @since    1.0.0
-	  */
-	 public function aucor_options(){
-	   // register_setting( 'aucor_options', 'aucor_options' );
-	}
-
-	/**
 	 * Reviews CPT
 	 *
 	 * @since    1.0.0
